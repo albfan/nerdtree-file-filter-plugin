@@ -29,7 +29,7 @@ Given that, you need to provide a failed test with three files:
  - testN.ok: Expected output for test
 
 1. When reporting new issues, add `"""" failed` to testN.vim to allow suite to detect expected failed test
-2. When fixing issues, remove failed mark to related test.
+2. When fixing issues, remove the failed mark from the related test.
 
 Please see files on t directory for examples
 

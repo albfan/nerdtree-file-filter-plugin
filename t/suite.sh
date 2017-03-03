@@ -25,7 +25,7 @@ function test() {
     fi
   done
 
-  if [ "$expect" == "skip" ]
+  if [[ $expect = "skip" ]]
   then
     echo $(colorecho 34 ${basenametest}) "${title}" $(colorecho 33 skip)
     continue
@@ -37,7 +37,7 @@ function test() {
   bash ../${basenametest}.sh &> /dev/null
   if [ "$SILENT" == 0 ]
   then
-    $VIM -N -e -s -u NONE -S ../helper.vim -S ../$basenametest.vim -c 'quitall!' 2> /dev/null 
+    $VIM -N -e -s -u NONE -S ../helper.vim -S ../$basenametest.vim -c 'quitall!' 2> /dev/null
   else
     $VIM -N -u NONE -S ../helper.vim -S ../$basenametest.vim -c 'quitall!'
   fi
@@ -46,9 +46,9 @@ function test() {
   rm -rf $tempdir
   diff -u ${basenametest}.ok ${basenametest}.out
   OK=$?
-  if [ "$OK" == 0 ]
+  if [[ $OK == 0 ]]
   then
-    if [ "$expect" == "failed" ]
+    if [[ $expect = "failed" ]]
     then
       echo $(colorecho 34 ${basenametest}) "${title}" $(colorecho 31 "not failed")
       OK=1
@@ -57,7 +57,7 @@ function test() {
       rm ${basenametest}.out
     fi
   else
-    if [ "$expect" == "failed" ]
+    if [[ $expect == "failed" ]]
     then
       echo $(colorecho 34 ${basenametest}) "${title}" $(colorecho 32 "failed correctly")
       rm ${basenametest}.out
@@ -71,11 +71,11 @@ function test() {
 
 function testsuite() {
   OK=0
-  
+
   getdependencies
-  
+
   SILENT=0
-  
+
   for testcase in test*.vim
   do
     basenametest=$(basename $testcase .vim)
@@ -86,11 +86,11 @@ function testsuite() {
     fi
   done
 
-  echo 
+  echo
 
   if [ $OK != 0 ]
   then
-    echo some test failed
+    echo some tests failed
   else
     echo test suite passed correctly
   fi
