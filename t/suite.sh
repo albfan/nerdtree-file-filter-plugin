@@ -106,7 +106,7 @@ function testsuite() {
 
   if [ $OK != 0 ]
   then
-    echo some test failed
+    echo some tests failed
   else
     echo test suite passed correctly
   fi

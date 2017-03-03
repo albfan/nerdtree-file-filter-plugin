@@ -1,5 +1,4 @@
 """ directory ignore 
-"""" failed
 
 " confirm it ignores directories without matching files
 
