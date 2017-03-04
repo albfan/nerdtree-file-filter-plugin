@@ -47,10 +47,26 @@ Given that, you need to provide a failed test with three files:
 
 Please see files on t directory for examples
 
-More info on [TDD](https://en.wikipedia.org/wiki/Test-driven_development) 
+### Skipping tests
+
+With an environment variable:
+
+    SKIP_TESTS=test1 ./suite.sh
+
+OR tag with `""""skip` e.g.
+
+    """ Some test name
+    """"skip
+    NERDTree
+    normal O
+    let g:NERDTreeFileFilterRegexp = 'a$'
+    normal ff
+    5,$w ../test2.out
+
+More info on [TDD](https://en.wikipedia.org/wiki/Test-driven_development)
 
 ### Running test suite
- 
+
     $ cd t
     $ ./suite.sh
 
