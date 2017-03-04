@@ -15,7 +15,7 @@ function test() {
   local OK
   basenametest=$1
   title="$(grep '^"""[^"]' $basenametest.vim | sed 's/^"""\s*//')"
-  expect=$(grep '^\s*""""' $basenametest.vim | sed 's/^""""\s*//')
+  expect=$(grep '^\s*""""' $basenametest.vim | sed 's/^""""\w*//')
   for skp in $SKIP_TESTS
   do
     if [ "$basenametest" == "$skp" ]
@@ -72,7 +72,7 @@ function test() {
 function testsuite() {
   OK=0
 
-  getdependencies
+  # getdependencies
 
   SILENT=0
 
