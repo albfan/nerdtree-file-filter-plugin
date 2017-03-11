@@ -28,6 +28,23 @@ if !exists('g:NERDTreeFileFilterEnabled')
     let g:NERDTreeFileFilterEnabled = 0
 endif
 
+function! NERDTreeDirectoryFilter(params)
+  if g:NERDTreeFileFilterEnabled != 1
+     return 0
+  endif
+
+  let current_path = a:params['path'].str()
+  let path = a:params['path']
+  let node = b:NERDTreeRoot.findNode(path)
+
+  if path.isDirectory
+    return node.getVisibleChildCount() == 0
+  endif
+
+  return 0
+
+endfunction
+
 function! NERDTreeFileFilter(params)
     if g:NERDTreeFileFilterEnabled != 1
        return 0
@@ -121,6 +138,7 @@ endfunction
 
 function! s:SetupListeners()
     call NERDTreeAddPathFilter('NERDTreeFileFilter')
+    call NERDTreeAddPathFilter('NERDTreeDirectoryFilter')
 endfunction
 
 call s:NERDTreeFileFilterMapping()

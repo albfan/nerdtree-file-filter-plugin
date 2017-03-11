@@ -37,9 +37,9 @@ function test() {
   bash ../${basenametest}.sh &> /dev/null
   if [ "$SILENT" == 0 ]
   then
-    $VIM -N -e -s -u NONE -S ../helper.vim -S ../$basenametest.vim -c 'quitall!' 2> /dev/null
+    $VIM -N -e -s -u NONE -S ../helper.vim -S ../$basenametest.vim -c 'quitall!' 2> /Users/markburns/code/nerdtree-file-filter-plugin/test.log
   else
-    $VIM -N -u NONE -S ../helper.vim -S ../$basenametest.vim -c 'quitall!'
+    $VIM -N -u NONE -S ../helper.vim -S ../$basenametest.vim -c 'quitall!' 2> /Users/markburns/code/nerdtree-file-filter-plugin/test.log
   fi
 
   cd ..
@@ -72,7 +72,7 @@ function test() {
 function testsuite() {
   OK=0
 
-  # getdependencies
+  getdependencies
 
   SILENT=0
 
