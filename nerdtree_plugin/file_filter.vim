@@ -1,8 +1,8 @@
-"if exists('g:loaded_nerdtree_file_filter')
-"    finish
-"endif
-"
-"let g:loaded_nerdtree_file_filter = 1
+if exists('g:loaded_nerdtree_file_filter')
+    finish
+endif
+
+let g:loaded_nerdtree_file_filter = 1
 
 if !exists('g:NERDTreeMapToggleFileFilter')
     let g:NERDTreeMapToggleFileFilter = "ff"
