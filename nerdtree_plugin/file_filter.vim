@@ -33,17 +33,29 @@ function! NERDTreeDirectoryFilter(params)
      return 0
   endif
 
-  let current_path = a:params['path'].str()
   let path = a:params['path']
-  let node = b:NERDTreeRoot.findNode(path)
 
   if path.isDirectory
-    return node.getVisibleChildCount() == 0
+    let tree = a:params['nerdtree']
+    let node = b:NERDTreeRoot.findNode(path)
+
+    return !s:anyVisibleChildNodes(node, tree)
   endif
 
   return 0
 
 endfunction
+
+function! s:anyVisibleChildNodes(node, tree)
+    for i in a:node.children
+        if !i.path.ignore(a:tree)
+          return 1
+        endif
+    endfor
+
+    return 0
+endfunction
+
 
 function! NERDTreeFileFilter(params)
     if g:NERDTreeFileFilterEnabled != 1
@@ -67,8 +79,8 @@ function! NERDTreeFileFilter(params)
     endif
     return current_path =~ regexes_negated ? 0 : current_path =~ regexes ? 0 : 1
 endfunction
- 
-function! s:toggleFileFilter() 
+
+function! s:toggleFileFilter()
     let g:NERDTreeFileFilterEnabled = !g:NERDTreeFileFilterEnabled
     call b:NERDTree.ui.renderViewSavingPosition()
     call b:NERDTree.ui.centerView()
