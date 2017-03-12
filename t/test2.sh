@@ -1,6 +1,11 @@
-
-# Creates a git repo with simple ignore filter
-
+# multiple non matching files
 mkdir -p foo/bar/shouldnt/see/this
 touch {,foo/,foo/bar/}{a,b,c,d,e}
-touch {,foo/bar/shouldnt/,foo/bar/shouldnt/see/,foo/bar/shouldnt/see/this/}{i,g,n,o,r,e}
+
+# no match
+mkdir -p foo/bar/shouldnt/see/this
+touch foo/bar/shouldnt/see/this/ignore
+
+# matching directory but not file
+mkdir -p  foo/see-this/and-this/
+touch  foo/see-this/and-this/ignore-this

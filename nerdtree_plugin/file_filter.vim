@@ -1,8 +1,8 @@
-if exists('g:loaded_nerdtree_file_filter')
-    finish
-endif
-
-let g:loaded_nerdtree_file_filter = 1
+"if exists('g:loaded_nerdtree_file_filter')
+"    finish
+"endif
+"
+"let g:loaded_nerdtree_file_filter = 1
 
 if !exists('g:NERDTreeMapToggleFileFilter')
     let g:NERDTreeMapToggleFileFilter = "ff"
@@ -29,27 +29,33 @@ if !exists('g:NERDTreeFileFilterEnabled')
 endif
 
 function! NERDTreeDirectoryFilter(params)
-  if g:NERDTreeFileFilterEnabled != 1
-     return 0
-  endif
+    if g:NERDTreeFileFilterEnabled != 1
+        return 0
+    endif
 
-  let path = a:params['path']
+    let path = a:params['path']
 
-  if path.isDirectory
-    let tree = a:params['nerdtree']
-    let node = b:NERDTreeRoot.findNode(path)
+    if path.isDirectory
+        let tree = a:params['nerdtree']
+        let node = b:NERDTreeRoot.findNode(path)
+        if empty(node)
+            return 0
+        endif
 
-    return !s:anyVisibleChildNodes(node, tree)
-  endif
+        return s:shouldFilter(path.str()) && (s:noVisibleChildren(node, tree))
+    endif
 
-  return 0
-
+    return 0
 endfunction
 
-function! s:anyVisibleChildNodes(node, tree)
+function! s:noVisibleChildren(node, tree)
+  return !s:anyVisibleChildren(a:node, a:tree)
+endfunction
+
+function! s:anyVisibleChildren(node, tree)
     for i in a:node.children
         if !i.path.ignore(a:tree)
-          return 1
+            return 1
         endif
     endfor
 
@@ -59,25 +65,32 @@ endfunction
 
 function! NERDTreeFileFilter(params)
     if g:NERDTreeFileFilterEnabled != 1
-       return 0
+        return 0
     endif
 
+    let path = a:params['path']
+    if path.isDirectory
+        return 0
+    endif
+    let filename = split(path.str(), "/")[-1]
+
+    return s:shouldFilter(filename)
+endfunction
+
+function! s:shouldFilter(path)
     let regex_tuple = [ g:NERDTreeFileFilterRegexp, g:NERDTreeFileFilterRegexpNegated]
     let regexes = regex_tuple[0]
     let regexes_negated = regex_tuple[1]
+
     if regexes == '\(\)$'
         return 0
     endif
-    let current_path = a:params['path'].str()
-    let path = a:params['path']
-    if path.isDirectory
-       return 0
-    endif
 
     if regexes_negated == '\(\)$'
-        return current_path =~ regexes ? 0 : 1
+        return a:path =~ regexes ? 0 : 1
     endif
-    return current_path =~ regexes_negated ? 0 : current_path =~ regexes ? 0 : 1
+
+    return a:path =~ regexes_negated ? 0 : a:path =~ regexes ? 0 : 1
 endfunction
 
 function! s:toggleFileFilter()
@@ -86,7 +99,7 @@ function! s:toggleFileFilter()
     call b:NERDTree.ui.centerView()
 endfunction
 
-function s:SID()
+function! s:SID()
     if !exists("s:sid")
         let s:sid = matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$')
     endif

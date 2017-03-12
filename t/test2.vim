@@ -4,6 +4,6 @@
 
 NERDTree
 normal O
-let g:NERDTreeFileFilterRegexp = 'a$'
+let g:NERDTreeFileFilterRegexp = 'a$\|/and-this'
 normal ff
 5,$w ../test2.out
