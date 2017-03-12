@@ -8,7 +8,7 @@ function colorecho() {
 
 function getdependencies() {
   rm -rf nerdtree
-  git clone https://github.com/scrooloose/nerdtree.git
+  git clone --depth 1 https://github.com/scrooloose/nerdtree.git
 }
 
 function test() {
@@ -37,45 +37,61 @@ function test() {
   bash ../${basenametest}.sh &> /dev/null
   if [ "$SILENT" == 0 ]
   then
-    $VIM -N -e -s -u NONE -S ../helper.vim -S ../$basenametest.vim -c 'quitall!' 2> /dev/null 
+    $VIM -N -e -s -u NONE -S ../helper.vim -S ../$basenametest.vim -c 'quitall!' 2> /dev/null
   else
     $VIM -N -u NONE -S ../helper.vim -S ../$basenametest.vim -c 'quitall!'
   fi
 
   cd ..
-  rm -rf $tempdir
-  diff -u ${basenametest}.ok ${basenametest}.out
+  DIFFOUTPUT="$(diff -u ${basenametest}.ok ${basenametest}.out)"
   OK=$?
   if [ "$OK" == 0 ]
   then
     if [ "$expect" == "failed" ]
     then
       echo $(colorecho 34 ${basenametest}) "${title}" $(colorecho 31 "not failed")
+      echo "$DIFFOUTPUT"
       OK=1
     else
       echo $(colorecho 34 ${basenametest}) "${title}" $(colorecho 32 ok)
-      rm ${basenametest}.out
+      if [ "$CLEAN" == 0 ]
+      then
+        rm ${basenametest}.out
+        rm -rf $tempdir
+      fi
     fi
   else
     if [ "$expect" == "failed" ]
     then
       echo $(colorecho 34 ${basenametest}) "${title}" $(colorecho 32 "failed correctly")
-      rm ${basenametest}.out
+      if [ "$CLEAN" == 0 ]
+      then
+        rm ${basenametest}.out
+        rm -rf $tempdir
+      fi
       OK=0
     else
       echo $(colorecho 34 ${basenametest}) "${title}" $(colorecho 31 ko)
+      echo "$DIFFOUTPUT"
     fi
   fi
+  if [ "$SHOWDIFF" == 0 ]
+  then
+      echo "$DIFFOUTPUT"
+  fi
+
   return $OK
 }
 
 function testsuite() {
   OK=0
-  
+
   getdependencies
-  
+
   SILENT=0
-  
+  CLEAN=0
+  SHOWDIFF=0
+
   for testcase in test*.vim
   do
     basenametest=$(basename $testcase .vim)
@@ -86,7 +102,7 @@ function testsuite() {
     fi
   done
 
-  echo 
+  echo
 
   if [ $OK != 0 ]
   then
@@ -103,6 +119,8 @@ then
   testsuite
 else
   SILENT=1
+  CLEAN=1
+  SHOWDIFF=1
   test $@
   exit $?
 fi

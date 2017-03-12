@@ -6,8 +6,8 @@ dist: trusty
 before_script:
   - sudo apt-get install vim
 
-script: 
-  - cd t 
+script:
+  - cd t
   - ./suite.sh
 
 notifications:
