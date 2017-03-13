@@ -42,7 +42,7 @@ function! NERDTreeDirectoryFilter(params)
             return 0
         endif
 
-        return s:shouldFilter(path.str()) && (s:noVisibleChildren(node, tree))
+        return s:noVisibleChildren(node, tree)
     endif
 
     return 0
