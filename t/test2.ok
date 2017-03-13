@@ -1,6 +1,12 @@
-▾ foo/
-  ▾ bar/
-      a
-  ▾ see-this/and-this/
-    a
-  a
+▾ should/
+  ▾ see/
+    ▾ this/
+        matching1
+        matching2
+        matching3
+      matching1
+      matching2
+      matching3
+    matching1
+    matching2
+    matching3

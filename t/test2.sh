@@ -1,11 +1,7 @@
-# multiple non matching files
-mkdir -p foo/bar/shouldnt/see/this
-touch {,foo/,foo/bar/}{a,b,c,d,e}
+mkdir -p shouldnt/see/this
+touch shouldnt/see/this/ignore
 
-# no match
-mkdir -p foo/bar/shouldnt/see/this
-touch foo/bar/shouldnt/see/this/ignore
+mkdir -p ignore/empty/directory/matching
 
-# matching directory but not file
-mkdir -p  foo/see-this/and-this/
-touch  foo/see-this/and-this/ignore-this
+mkdir -p should/see/this/
+touch {should/,should/see/,should/see/this/}{matching1,matching2,matching3}
