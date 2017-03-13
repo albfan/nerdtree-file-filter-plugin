@@ -1,4 +1,4 @@
-""" simple ignore
+""" file ignore
 
 " check for simple file filter
 
